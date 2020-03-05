@@ -37,19 +37,23 @@ function hero () {
     // move
     controller.moveSprite(SpaceShip, 200, 200)
     // this block makes it so your player can say anything
-    // you type in 
+    // you type in
     SpaceShip.say("pasta la vista ")
+}
+function score () {
+    info.setScore(0)
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     // this block gives the death effect when killing the
     // enemy
     otherSprite.destroy(effects.ashes, 100)
     music.magicWand.play()
+    info.changeScoreBy(1)
 })
-// when a is pressed missiles will shoot out
+// when A is pressed missiles will shoot out
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     // this block is the projectile that you can shoot by
-    // pressing A 
+    // pressing A
     missle = sprites.createProjectileFromSprite(img`
 . . . . . . . . . . . . . . . . 
 . . . f f f f f f f f f f . . . 
@@ -68,12 +72,14 @@ f e e e e e e e f e e e e c c f
 . . . f f f f f f f f f f . . . 
 . . . . . . . . . . . . . . . . 
 `, SpaceShip, 200, 0)
+    // whenever you press A to shoot a projectile, a sound
+    // will play while firing
     music.pewPew.playUntilDone()
 })
-// this function is in charge of the music 
+// this function is in charge of the music
 function music2 () {
     // this is the music block which allows you  to make
-    // any theme with many different tones 
+    // any theme with many different tones
     music.playMelody("D C D C D C D C ", 209)
     music.playMelody("A F G E G A A G ", 120)
     music.playMelody("C D E E D E F G ", 205)
@@ -81,6 +87,7 @@ function music2 () {
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy()
+    // if the enemy runs into you, you lose a heart
     info.changeLifeBy(-1)
 })
 info.onCountdownEnd(function () {
@@ -223,6 +230,7 @@ f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f 
 f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f 
 f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f 
 `)
+score()
 game.onUpdateInterval(500, function () {
     // this is the enemy that the hero will try and
     // destroy
@@ -263,4 +271,5 @@ game.onUpdateInterval(500, function () {
 })
 forever(function () {
     music2()
+    scene.cameraShake(8, 5000)
 })
